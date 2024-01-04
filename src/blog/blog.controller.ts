@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { BlogService } from './blog.service';
 import {
   ApiBearerAuth,
@@ -76,7 +83,7 @@ export class BlogController {
     status: 200,
     description: 'The blog has been successfully deleted.',
   })
-  @Post('deleteBlog/:id')
+  @Delete('deleteBlog/:id')
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
   @Roles(Role.USER)
   deleteBlog(@Param() params: any) {

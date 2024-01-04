@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegistrationDto } from './dto/registration.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -12,7 +12,7 @@ export class UserController {
   //Registration API.
   @ApiOperation({ summary: 'People can do register.' })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'The user has been successfully registered.',
   })
   @Post('registration')
@@ -34,10 +34,10 @@ export class UserController {
   //Active account API.
   @ApiOperation({ summary: 'Active account.' })
   @ApiResponse({
-    status: 200,
+    status: 202,
     description: 'The user has been successfully activated.',
   })
-  @Post('activeAccount')
+  @Put('activeAccount')
   activeAccount(@Body() activeAccountDto: ActiveAccountDto) {
     return this.userService.activeAccount(activeAccountDto);
   }
