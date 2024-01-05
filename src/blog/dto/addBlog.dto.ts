@@ -1,17 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsEnum, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
 import { Status } from 'src/services/eums';
 
 export class AddBlogDto {
-  @IsNumber()
-  @IsNotEmpty()
-  @ApiProperty({
-    type: Number,
-    example: '2',
-    description: 'You need to give userId of user.',
-  })
-  userId: number;
-
   @IsString()
   @IsNotEmpty()
   @ApiProperty({

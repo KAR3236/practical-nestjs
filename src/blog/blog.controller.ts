@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
+  Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
@@ -19,7 +22,6 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/services/eums';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { EditBlogDto } from './dto/editBlog.dto';
-import { ListOfBlogDto } from './dto/listOfBlog.dto';
 
 @Controller('blog')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -35,8 +37,8 @@ export class BlogController {
   })
   @Post('addBlog')
   @Roles(Role.USER)
-  addBlog(@Body() addBlogDto: AddBlogDto) {
-    return this.blogService.addBlog(addBlogDto);
+  addBlog(@Body() addBlogDto: AddBlogDto, @Request() request) {
+    return this.blogService.addBlog(addBlogDto, request);
   }
 
   //Edit blog API.
@@ -46,7 +48,7 @@ export class BlogController {
     description: 'The blog has been successfully edited.',
   })
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
-  @Post('editBlog/:id')
+  @Put('editBlog/:id')
   @Roles(Role.USER)
   editBlog(@Param() params: any, @Body() editBlogDto: EditBlogDto) {
     return this.blogService.editBlog(params, editBlogDto);
@@ -58,7 +60,7 @@ export class BlogController {
     status: 200,
     description: 'The blog has been successfully view.',
   })
-  @Post('viewBlog/:id')
+  @Get('viewBlog/:id')
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
   @Roles(Role.USER)
   viewBlog(@Param() params: any) {
@@ -71,10 +73,22 @@ export class BlogController {
     status: 200,
     description: 'The blog has been successfully view.',
   })
-  @Post('listOfBlog')
+  @Get('listOfBlog')
+  @Roles(Role.USER)
+  listOfBlog(@Request() request) {
+    return this.blogService.listOfBlog(request);
+  }
+
+  //List of blog API.
+  @ApiOperation({ summary: 'User can view list of blog.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The blog has been successfully view.',
+  })
+  @Get('listOfBlogWithUser')
   @Roles(Role.USER, Role.ADMIN)
-  listOfBlog(@Body() listOfBlogDto: ListOfBlogDto) {
-    return this.blogService.listOfBlog(listOfBlogDto);
+  listOfBlogWithUser() {
+    return this.blogService.listOfBlogWithUser();
   }
 
   //Delete blog API.

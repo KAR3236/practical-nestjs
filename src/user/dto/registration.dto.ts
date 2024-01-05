@@ -22,7 +22,7 @@ export class RegistrationDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
-  @MinLength(6)
+  @MinLength(8)
   @ApiProperty({
     type: String,
     example: 'Kaushik@1',

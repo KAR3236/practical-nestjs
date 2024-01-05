@@ -117,7 +117,7 @@ export class UserService {
         if (activeUserData === 1) {
           return handelResponse({
             statusCode: 202,
-            message: `Your ${message.ACCOUNT_ACTIVATED}`,
+            message: `${message.ACCOUNT_ACTIVATED}`,
           });
         } else {
           return handelResponse({

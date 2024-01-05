@@ -7,7 +7,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AddBlogInterface } from 'src/services/blogInterface';
 import { EditBlogDto } from './dto/editBlog.dto';
 import { User } from 'src/models/user.model';
-import { ListOfBlogDto } from './dto/listOfBlog.dto';
 
 @Injectable()
 export class BlogService {
@@ -18,10 +17,11 @@ export class BlogService {
     private userModel: typeof User,
   ) {}
 
-  async addBlog(dto: AddBlogDto) {
+  async addBlog(dto: AddBlogDto, req: any) {
     try {
       const blogData: AddBlogInterface = await this.blogModel.create({
         ...dto,
+        userId: req.user.id,
       });
 
       if (blogData) {
@@ -83,7 +83,7 @@ export class BlogService {
 
       if (blogData) {
         return handelResponse({
-          statusCode: 202,
+          statusCode: 200,
           message: `Blog ${message.VIEW_SUCCESSFULLY}`,
           data: blogData,
         });
@@ -101,7 +101,36 @@ export class BlogService {
     }
   }
 
-  async listOfBlog(dto: ListOfBlogDto) {
+  async listOfBlog(req: any) {
+    try {
+      const blogData: any[] = await this.blogModel.findAll({
+        where: {
+          userId: req.user.id,
+        },
+        order: [['id', 'DESC']],
+      });
+
+      if (blogData.length > 0) {
+        return handelResponse({
+          statusCode: 200,
+          message: `${message.LIST_OF_VIEW_SUCCESSFULLY}`,
+          data: blogData,
+        });
+      } else {
+        return handelResponse({
+          statusCode: 400,
+          message: `Data ${message.NOT_FOUND}`,
+        });
+      }
+    } catch (error) {
+      return handelResponse({
+        statusCode: 500,
+        message: message.PLEASE_TRY_AGAIN,
+      });
+    }
+  }
+
+  async listOfBlogWithUser() {
     try {
       const [blogData]: any[] = await this.userModel.findAll({
         attributes: [
@@ -116,7 +145,6 @@ export class BlogService {
         include: [
           {
             model: this.blogModel,
-            where: dto.userId ? { userId: dto.userId } : {},
             order: [['id', 'DESC']],
           },
         ],
@@ -124,7 +152,7 @@ export class BlogService {
 
       if (blogData.blog.length > 0) {
         return handelResponse({
-          statusCode: 202,
+          statusCode: 200,
           message: `${message.LIST_OF_VIEW_SUCCESSFULLY}`,
           data: blogData,
         });
