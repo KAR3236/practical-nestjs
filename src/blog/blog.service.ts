@@ -103,54 +103,35 @@ export class BlogService {
 
   async listOfBlog(req: any) {
     try {
-      const blogData: any[] = await this.blogModel.findAll({
-        where: {
-          userId: req.user.id,
-        },
-        order: [['id', 'DESC']],
-      });
-
-      if (blogData.length > 0) {
-        return handelResponse({
-          statusCode: 200,
-          message: `${message.LIST_OF_VIEW_SUCCESSFULLY}`,
-          data: blogData,
+      let blogData: any[];
+      if (req.user.role === 'User') {
+        blogData = await this.blogModel.findAll({
+          where: {
+            userId: req.user.id,
+          },
+          order: [['id', 'DESC']],
         });
       } else {
-        return handelResponse({
-          statusCode: 400,
-          message: `Data ${message.NOT_FOUND}`,
+        blogData = await this.blogModel.findAll({
+          order: [['id', 'DESC']],
+          include: [
+            {
+              model: this.userModel,
+              attributes: [
+                'id',
+                [
+                  this.userModel.sequelize.literal(
+                    `CONCAT(first_name, ' ' ,last_name)`,
+                  ),
+                  'full_name',
+                ],
+              ],
+            },
+          ],
         });
       }
-    } catch (error) {
-      return handelResponse({
-        statusCode: 500,
-        message: message.PLEASE_TRY_AGAIN,
-      });
-    }
-  }
 
-  async listOfBlogWithUser() {
-    try {
-      const [blogData]: any[] = await this.userModel.findAll({
-        attributes: [
-          'id',
-          [
-            this.userModel.sequelize.literal(
-              `CONCAT(first_name, ' ' ,last_name)`,
-            ),
-            'full_name',
-          ],
-        ],
-        include: [
-          {
-            model: this.blogModel,
-            order: [['id', 'DESC']],
-          },
-        ],
-      });
-
-      if (blogData.blog.length > 0) {
+      if (blogData.length > 0) {
         return handelResponse({
           statusCode: 200,
           message: `${message.LIST_OF_VIEW_SUCCESSFULLY}`,

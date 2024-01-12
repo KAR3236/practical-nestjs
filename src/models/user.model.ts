@@ -1,5 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Role } from 'src/services/eums';
+import { Blog } from './blog.model';
 
 @Table({ tableName: 'User' })
 export class User extends Model {
@@ -46,4 +47,7 @@ export class User extends Model {
     defaultValue: false,
   })
   status: boolean;
+
+  @HasMany(() => Blog, { foreignKey: 'userId' })
+  blog: Blog;
 }

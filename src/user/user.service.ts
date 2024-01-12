@@ -138,4 +138,32 @@ export class UserService {
       });
     }
   }
+
+  async viewUser(req: any) {
+    try {
+      const userData: RegistrationInterface = await this.userModel.findOne({
+        where: {
+          id: req.user.id,
+        },
+      });
+
+      if (userData) {
+        return handelResponse({
+          statusCode: 200,
+          message: `User data ${message.VIEW_SUCCESSFULLY}`,
+          data: userData,
+        });
+      } else {
+        return handelResponse({
+          statusCode: 404,
+          message: `Data ${message.NOT_FOUND}`,
+        });
+      }
+    } catch (error) {
+      return handelResponse({
+        statusCode: 500,
+        message: message.PLEASE_TRY_AGAIN,
+      });
+    }
+  }
 }

@@ -68,27 +68,15 @@ export class BlogController {
   }
 
   //List of blog API.
-  @ApiOperation({ summary: 'User can view list of blog.' })
+  @ApiOperation({ summary: 'User and Admin can view list of blog.' })
   @ApiResponse({
     status: 200,
     description: 'The blog has been successfully view.',
   })
   @Get('listOfBlog')
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   listOfBlog(@Request() request) {
     return this.blogService.listOfBlog(request);
-  }
-
-  //List of blog API.
-  @ApiOperation({ summary: 'User can view list of blog.' })
-  @ApiResponse({
-    status: 200,
-    description: 'The blog has been successfully view.',
-  })
-  @Get('listOfBlogWithUser')
-  @Roles(Role.USER, Role.ADMIN)
-  listOfBlogWithUser() {
-    return this.blogService.listOfBlogWithUser();
   }
 
   //Delete blog API.
