@@ -7,10 +7,13 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    // Here, Make configuration of sequelize module for which models need to use in user services.
+    // So, Add all models which are used in user services.
     SequelizeModule.forFeature([User]),
+    // Here, Make configuration of JWT module for authentication.
     JwtModule.register({
-      secret: 'JWTPrivateKey',
-      signOptions: { expiresIn: '5h' },
+      secret: 'JWTPrivateKey', // secret key for authnentication and use this secret key for authorization.
+      signOptions: { expiresIn: '5h' }, // Here, Given expires time for token.
     }),
   ],
   providers: [UserService],

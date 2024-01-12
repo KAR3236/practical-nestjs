@@ -12,9 +12,11 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    //Configure configuration module for .env file
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    //Make Sequelize ORM connection
     SequelizeModule.forRoot({
       dialect: process.env.DIALECT as Dialect,
       host: process.env.DBHOST,
@@ -27,8 +29,10 @@ import { AuthModule } from './auth/auth.module';
       // sync: {
       //   force: true,
       // },
+      //When create new models that time add all models here..
       models: [User, Blog],
     }),
+    //Add all module of which new created.
     UserModule,
     BlogModule,
     AuthModule,

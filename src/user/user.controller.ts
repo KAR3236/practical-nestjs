@@ -60,9 +60,12 @@ export class UserController {
     status: 200,
     description: 'The user has been successfully get.',
   })
+  // Guards for authorization.
   @UseGuards(JwtAuthGuard, RolesGuard)
+  // This for bearer token added in swagger.
   @ApiBearerAuth()
   @Get('viewUser')
+  // Add roles based on API
   @Roles(Role.USER, Role.ADMIN)
   viewUser(@Request() request) {
     return this.userService.viewUser(request);

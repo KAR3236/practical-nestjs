@@ -10,6 +10,7 @@ export class AuthService {
   ) {}
 
   async validateUserById(id: number): Promise<User | null> {
+    // This query will find data based on is which is in the token.
     return await this.userModel.findOne({ where: { id } });
   }
 }
