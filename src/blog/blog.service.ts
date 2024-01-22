@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AddBlogInterface } from 'src/services/blogInterface';
 import { EditBlogDto } from './dto/editBlog.dto';
 import { User } from 'src/models/user.model';
+import { ResponseInterface } from 'src/services/commonInterface';
 
 @Injectable()
 export class BlogService {
@@ -17,7 +18,7 @@ export class BlogService {
     private userModel: typeof User,
   ) {}
 
-  async addBlog(dto: AddBlogDto, req: any) {
+  async addBlog(dto: AddBlogDto, req: any): Promise<ResponseInterface> {
     try {
       const blogData: AddBlogInterface = await this.blogModel.create({
         ...dto,
@@ -45,7 +46,7 @@ export class BlogService {
     }
   }
 
-  async editBlog(params: any, dto: EditBlogDto) {
+  async editBlog(params: any, dto: EditBlogDto): Promise<ResponseInterface> {
     try {
       const [blogData]: number[] = await this.blogModel.update(
         {
@@ -75,7 +76,7 @@ export class BlogService {
     }
   }
 
-  async viewBlog(params: any) {
+  async viewBlog(params: any): Promise<ResponseInterface> {
     try {
       const blogData: AddBlogInterface = await this.blogModel.findOne({
         where: { id: params.id },
@@ -101,7 +102,7 @@ export class BlogService {
     }
   }
 
-  async listOfBlog(req: any) {
+  async listOfBlog(req: any): Promise<ResponseInterface> {
     try {
       let blogData: any[];
       if (req.user.role === 'User') {
@@ -151,7 +152,7 @@ export class BlogService {
     }
   }
 
-  async deleteBlog(params: any) {
+  async deleteBlog(params: any): Promise<ResponseInterface> {
     try {
       const blogData: number = await this.blogModel.destroy({
         where: { id: params.id },

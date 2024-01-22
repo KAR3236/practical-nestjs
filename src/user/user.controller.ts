@@ -16,6 +16,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/services/eums';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { ResponseInterface } from 'src/services/commonInterface';
 
 @Controller('user')
 export class UserController {
@@ -28,7 +29,9 @@ export class UserController {
     description: 'The user has been successfully registered.',
   })
   @Post('registration')
-  registration(@Body() registrationDto: RegistrationDto) {
+  registration(
+    @Body() registrationDto: RegistrationDto,
+  ): Promise<ResponseInterface> {
     return this.userService.registration(registrationDto);
   }
 
@@ -39,7 +42,7 @@ export class UserController {
     description: 'The user has been successfully logged in.',
   })
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
+  login(@Body() loginDto: LoginDto): Promise<ResponseInterface> {
     return this.userService.login(loginDto);
   }
 
@@ -50,7 +53,9 @@ export class UserController {
     description: 'The user has been successfully activated.',
   })
   @Put('activeAccount')
-  activeAccount(@Body() activeAccountDto: ActiveAccountDto) {
+  activeAccount(
+    @Body() activeAccountDto: ActiveAccountDto,
+  ): Promise<ResponseInterface> {
     return this.userService.activeAccount(activeAccountDto);
   }
 
@@ -67,7 +72,7 @@ export class UserController {
   @Get('viewUser')
   // Add roles based on API
   @Roles(Role.USER, Role.ADMIN)
-  viewUser(@Request() request) {
+  viewUser(@Request() request): Promise<ResponseInterface> {
     return this.userService.viewUser(request);
   }
 }

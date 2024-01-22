@@ -22,6 +22,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/services/eums';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { EditBlogDto } from './dto/editBlog.dto';
+import { ResponseInterface } from 'src/services/commonInterface';
 
 @Controller('blog')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,7 +38,10 @@ export class BlogController {
   })
   @Post('addBlog')
   @Roles(Role.USER)
-  addBlog(@Body() addBlogDto: AddBlogDto, @Request() request) {
+  addBlog(
+    @Body() addBlogDto: AddBlogDto,
+    @Request() request,
+  ): Promise<ResponseInterface> {
     return this.blogService.addBlog(addBlogDto, request);
   }
 
@@ -50,7 +54,10 @@ export class BlogController {
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
   @Put('editBlog/:id')
   @Roles(Role.USER)
-  editBlog(@Param() params: any, @Body() editBlogDto: EditBlogDto) {
+  editBlog(
+    @Param() params: any,
+    @Body() editBlogDto: EditBlogDto,
+  ): Promise<ResponseInterface> {
     return this.blogService.editBlog(params, editBlogDto);
   }
 
@@ -63,7 +70,7 @@ export class BlogController {
   @Get('viewBlog/:id')
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
   @Roles(Role.USER)
-  viewBlog(@Param() params: any) {
+  viewBlog(@Param() params: any): Promise<ResponseInterface> {
     return this.blogService.viewBlog(params);
   }
 
@@ -75,7 +82,7 @@ export class BlogController {
   })
   @Get('listOfBlog')
   @Roles(Role.USER, Role.ADMIN)
-  listOfBlog(@Request() request) {
+  listOfBlog(@Request() request): Promise<ResponseInterface> {
     return this.blogService.listOfBlog(request);
   }
 
@@ -88,7 +95,7 @@ export class BlogController {
   @Delete('deleteBlog/:id')
   @ApiParam({ name: 'id', example: 1, description: 'Pass blog ID here.' })
   @Roles(Role.USER)
-  deleteBlog(@Param() params: any) {
+  deleteBlog(@Param() params: any): Promise<ResponseInterface> {
     return this.blogService.deleteBlog(params);
   }
 }

@@ -9,6 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ActiveAccountDto } from './dto/activeAccount.dto';
+import { ResponseInterface } from 'src/services/commonInterface';
 const salt: number = 10;
 
 @Injectable()
@@ -19,7 +20,7 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-  async registration(dto: RegistrationDto) {
+  async registration(dto: RegistrationDto): Promise<ResponseInterface> {
     try {
       dto.password = await bcrypt.hash(dto.password, salt);
 
@@ -48,7 +49,7 @@ export class UserService {
     }
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<ResponseInterface> {
     try {
       const userData: RegistrationInterface = await this.userModel.findOne({
         where: {
@@ -96,7 +97,7 @@ export class UserService {
     }
   }
 
-  async activeAccount(dto: ActiveAccountDto) {
+  async activeAccount(dto: ActiveAccountDto): Promise<ResponseInterface> {
     try {
       const userData: RegistrationInterface = await this.userModel.findOne({
         where: {
@@ -139,7 +140,7 @@ export class UserService {
     }
   }
 
-  async viewUser(req: any) {
+  async viewUser(req: any): Promise<ResponseInterface> {
     try {
       const userData: RegistrationInterface = await this.userModel.findOne({
         where: {
